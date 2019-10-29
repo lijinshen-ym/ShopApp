@@ -63,7 +63,7 @@ export default {
 </script>
 <style lang="css" scoped>
     *{
-        /* touch-action: none; */
+        touch-action: none;
     }
     img[lazy=loading] {
         width: 40px;

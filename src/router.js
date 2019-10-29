@@ -9,6 +9,8 @@ import photolist from "./conponent/home/photolist.vue";
 import photoinfo from "./conponent/home/photoinfo.vue";
 import shopping from "./conponent/home/shopping.vue";
 import shopinfo from "./conponent/home/shopinfo.vue";
+import details from "./conponent/home/details.vue";
+import goodsComment from "./conponent/home/goodsComment.vue";
 
 var router=new Router({
         routes:[
@@ -22,7 +24,9 @@ var router=new Router({
             {path:"/home/photoshare",component:photolist},
             {path:"/home/photoinfo/:id",component:photoinfo},
             {path:"/home/shopping",component:shopping},
-            {path:"/home/shopinfo/:id",component:shopinfo}
+            {path:"/home/shopinfo/:id",component:shopinfo},
+            {path:"home/details/:id",name:"detail",component:details},
+            {path:"/home/goodsComment",name:"gcomment",component:goodsComment}
         ],
         linkActiveClass:"mui-active"
 })

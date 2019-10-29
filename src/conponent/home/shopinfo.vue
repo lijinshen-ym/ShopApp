@@ -1,5 +1,12 @@
 <template>
     <div class="shopinfo">
+        <transition
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @after-enter="afterEnter"
+        >
+            <div class="ball" v-show="ballflag" ref="ball"></div>
+        </transition>
         <div class="mui-card">
             <div class="mui-card-content">
                 <div class="mui-card-content-inner">
@@ -18,7 +25,7 @@
                     </div>
                     <div class="sbutton">
                         <mt-button type="danger" size="small"  >立即购买</mt-button>
-                        <mt-button type="primary" size="small"  >加入购物车</mt-button>
+                        <mt-button type="primary" size="small"  @click="showFn">加入购物车</mt-button>
                     </div> 
                 </div>
             </div>
@@ -34,10 +41,10 @@
             </div>
             <div class="mui-card-footer">
                 <div>
-                    <mt-button type="primary" size="large" plain >图文介绍</mt-button>
+                    <mt-button type="primary" size="large" plain @click="details(id)">图文介绍</mt-button>
                 </div>
                 <div>
-                    <mt-button type="danger" size="large" plain >商品评论</mt-button>
+                    <mt-button type="danger" size="large" plain @click="gcomment(id)">商品评论</mt-button>
                 </div>
             </div>
 		</div>
@@ -46,13 +53,15 @@
 <script>
 import swipe from "../tagcomponent/swipe.vue";
 import goodsbotton from "../tagcomponent/goodsbutton.vue";
+import { Transform } from 'stream';
 export default {
     data(){
         return {
             id: this.$route.params.id,
             imglist:[],
             flag:false,
-            info:{}
+            info:{},
+            ballflag:false
         }
     },
     created(){
@@ -74,10 +83,35 @@ export default {
             this.$http.get("api/goods/getinfo/"+this.id).then(result=>{
                 if(result.body.status==0){
                     this.info=result.body.message[0];
-                    console.log(this.info);
                 }
             })
+        },
+        showFn(){
+            this.ballflag=!this.ballflag;
+        },
+        details(id){
+            this.$router.push({name:"detail",params:{id}})
+        },
+        gcomment(id){
+            this.$router.push({name:"gcomment",params:{id}})
+        },
+        beforeEnter(el){
+           el.style.transform="translate(0,0)";
+        },
+        enter(el,done){
+            const ballrect=this.$refs.ball.getBoundingClientRect()
+            const mbadgerect=document.getElementById("mbadge").getBoundingClientRect();
+            const mtop=mbadgerect.top-ballrect.top;
+            const mleft=mbadgerect.left-ballrect.left;
+            el.offsetWidth;
+            el.style.transform = `translate(${mleft}px,${mtop}px)`;
+            el.style.transition = "all 1s ease";
+            done();
+        },
+        afterEnter(el){
+            this.ballflag=!this.ballflag;
         }
+
         
     },
     components:{
@@ -109,6 +143,17 @@ export default {
     }
     .shopinfo .sbutton{
         margin-top: 10px;
+    }
+
+    .shopinfo .ball{
+        width: 15px;
+        height:15px;
+        border-radius: 45px;
+        background: red;
+        position: absolute;
+        top: 403px;
+        left:146px;
+        z-index: 99;
     }
 
 </style>
