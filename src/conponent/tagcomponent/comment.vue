@@ -2,12 +2,12 @@
     <div class="comment">
         <h2>评论</h2>
         <hr>
-        <textarea placeholder="请输入评论，最多可输入100字" maxlength="100"></textarea>
-        <mt-button type="primary" size="large">发表评论</mt-button>
+        <textarea placeholder="请输入评论，最多可输入100字" maxlength="100" v-model="msg"></textarea>
+        <mt-button type="primary" size="large" @click="pushcomt">发表评论</mt-button>
         <div class="comlist">
-            <div class="listli" v-for="(item,index) in comlist" :key="item.add_time">
+            <div class="listli" v-for="(item,index) in comlist" :key="index">
                 <div class="litop">
-                    <span>第{{index}}楼</span>
+                    <span>第{{index+1}}楼</span>
                     <span>用户：{{item.user_name}}</span>
                     <span>评论时间：{{item.add_time | dateFormat}}</span>
                 </div>
@@ -20,12 +20,13 @@
     </div>
 </template>
 <script>
-
+import { Toast } from "mint-ui";
 export default {
     data(){
         return {
             pageindex:1,
-            comlist:[]
+            comlist:[],
+            msg:""
         }
     },
     created() {
@@ -35,14 +36,38 @@ export default {
         getcom:function(){
             this.$http.get("api/getcomments/"+this.id+"?pageindex="+this.pageindex).then(result=>{
                 this.comlist=this.comlist.concat(result.body.message);
-                console.log(this.comlist);
             })
         },
         addcom:function(){
             this.pageindex++;
             this.getcom();
+        },
+        pushcomt:function(){
+            if(this.msg.trim()==""){
+                Toast({
+                    message:"不能发表空评论",
+                    duration:2000
+                })
+                return;
+            }else{
+               this.$http.post("api/postcomment/"+this.id,{content:this.msg.trim()}).then(result=>{
+                    if(result.body.status===0){
+                        var obj={
+                            user_name:"匿名用户",
+                            add_time:new Date(),
+                            content:this.msg
+                        }
+                        this.comlist.unshift(obj);
+                        this.msg="";
+                    }else{
+                        Toast({
+                            message:"评论发表失败",
+                            duration: 2000
+                        })
+                    }
+               }) 
+            }
         }
-        
     },
     props:["id"]
 }
@@ -50,6 +75,7 @@ export default {
 <style lang="css" scoped>
     .comment h2{
         font-size:17px;
+        width: 100%;
     }
     .comment textarea {
         height: 85px;

@@ -1,0 +1,16 @@
+/*图片预览 缩略图*/
+
+.preview figure {
+    display: inline-block;
+    width: 30%;
+    margin: 1.5%;
+
+}
+/* .preview{
+    height: 250px;
+} */
+  
+.preview figure img {
+    width: 100px;
+}
+  

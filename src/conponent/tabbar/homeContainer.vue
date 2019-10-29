@@ -1,18 +1,14 @@
 <template>
     <div class="home-box">
-        <mt-swipe :auto="2000">
-            <mt-swipe-item v-for="item in banner" :key="item.img">
-                <img :src="item.img">
-            </mt-swipe-item>
-        </mt-swipe>
+        <swipe :banner="banner" :flag="flag"></swipe>
         <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/home/newslist">
                     <img src="../../image/homeimg/menu1.png" alt="">
                     <div class="mui-media-body">新闻资讯</div></router-link></li>
-            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="#">
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/home/photoshare">
                     <img src="../../image/homeimg/menu2.png" alt="">
                     <div class="mui-media-body">图片分享</div></router-link></li>
-            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="#">
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/home/shopping">
                     <img src="../../image/homeimg/menu3.png" alt="">
                     <div class="mui-media-body">商品购买</div></router-link></li>
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="#">
@@ -29,11 +25,13 @@
 </template>
 <script>
 import { Toast } from 'mint-ui';
+import swipe from "../tagcomponent/swipe.vue";
 
 export default {
     data(){
 		return {
-			banner:[]
+            banner:[],
+            flag:true
 		}
 	},
 	created(){
@@ -55,26 +53,13 @@ export default {
 			})
 		}
     },
+    components:{
+        swipe
+    }
 }
 </script>
 
 <style scoped>
-    .mint-swipe{
-        height: 200px;
-    }
-     /* .mint-swipe-item:nth-child(1){
-        background: #00BCD4;
-    }
-    .mint-swipe-item:nth-child(2){
-        background: #546E7A;
-    }
-    .mint-swipe-item:nth-child(3){
-        background: #263238;
-    } */
-    img{
-        height:100%;
-        width:100%;
-    }
     .mui-grid-view.mui-grid-9 {
         background: white;
         border:none;
