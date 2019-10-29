@@ -5,6 +5,7 @@
             @enter="enter"
             @after-enter="afterEnter"
         >
+        //小球
             <div class="ball" v-show="ballflag" ref="ball"></div>
         </transition>
         <div class="mui-card">
@@ -21,7 +22,9 @@
                     <span>市场价：<del>{{info.market_price}}</del></span>
                     <span>销售价：<i>￥{{info.sell_price}}</i></span>
                     <div class="snumbox">
-                        购买数量：<goodsbotton></goodsbotton>
+                        //childCount是从子组件往父组件传值，这是值是购买的数量
+                        //maxvalue是库存量，从父组件传值给子组件，并设置购买的最大数量
+                        购买数量：<goodsbotton @childCount="getCount" :maxvalue="info.stock_quantity"></goodsbotton>
                     </div>
                     <div class="sbutton">
                         <mt-button type="danger" size="small"  >立即购买</mt-button>
@@ -61,7 +64,8 @@ export default {
             imglist:[],
             flag:false,
             info:{},
-            ballflag:false
+            ballflag:false,
+            count:1
         }
     },
     created(){
@@ -89,12 +93,17 @@ export default {
         showFn(){
             this.ballflag=!this.ballflag;
         },
+
+        // 图文详情的编程式导航
         details(id){
             this.$router.push({name:"detail",params:{id}})
         },
+        // 商品评论的编程式导航
         gcomment(id){
             this.$router.push({name:"gcomment",params:{id}})
         },
+        
+        //钩子函数实现半场动画
         beforeEnter(el){
            el.style.transform="translate(0,0)";
         },
@@ -110,8 +119,12 @@ export default {
         },
         afterEnter(el){
             this.ballflag=!this.ballflag;
-        }
+        },
 
+        //购买商品数量的父子组件传值的函数
+        getCount(acount){
+            this.count=acount;
+        }
         
     },
     components:{

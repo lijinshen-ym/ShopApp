@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="mui-numbox" data-numbox-min='1' data-numbox-max='9'>
+        <div class="mui-numbox" data-numbox-min='1'>
             <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
-            <input id="test" class="mui-input-numbox" type="number" value="1" />
+            <input id="test" class="mui-input-numbox" type="number" value="1" @change="changeCount" ref="number"/>
             <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>
         </div>
     </div>
@@ -16,6 +16,19 @@ export default {
     mounted() {
         mui(".mui-numbox").numbox()
     },
+    methods:{
+        changeCount(){
+            this.$emit("childCount",parseInt(this.$refs.number.value));
+        }
+    },
+    props:["maxvalue"],
+    //使用watch动态监听属性变化，并设置最大值
+    watch:{
+        "maxvalue":function(newVal,oldVal){
+            mui(".mui-numbox").numbox().setOption('max',newVal);
+        }
+    }
+
 
 }
 </script>
